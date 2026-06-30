@@ -1,0 +1,58 @@
+import type { Turbine } from '../types/turbine'
+
+export const mockTurbines: Turbine[] = [
+  {
+    id: 'T-001',
+    name: 'Turbine 1',
+    farm: 'Alpha Farm',
+    status: 'online',
+    powerOutput: 2400,
+    windSpeed: 12.3,
+    lastUpdated: '2 min ago',
+  },
+  {
+    id: 'T-002',
+    name: 'Turbine 2',
+    farm: 'Alpha Farm',
+    status: 'warning',
+    powerOutput: 1800,
+    windSpeed: 9.1,
+    lastUpdated: '5 min ago',
+  },
+  {
+    id: 'T-003',
+    name: 'Turbine 3',
+    farm: 'Alpha Farm',
+    status: 'offline',
+    powerOutput: 0,
+    windSpeed: 3.2,
+    lastUpdated: '1 hr ago',
+  },
+  {
+    id: 'T-004',
+    name: 'Turbine 4',
+    farm: 'Beta Farm',
+    status: 'online',
+    powerOutput: 3100,
+    windSpeed: 14.7,
+    lastUpdated: '1 min ago',
+  },
+  {
+    id: 'T-005',
+    name: 'Turbine 5',
+    farm: 'Beta Farm',
+    status: 'online',
+    powerOutput: 2900,
+    windSpeed: 13.5,
+    lastUpdated: '3 min ago',
+  },
+  {
+    id: 'T-006',
+    name: 'Turbine 6',
+    farm: 'Beta Farm',
+    status: 'offline',
+    powerOutput: 0,
+    windSpeed: 2.8,
+    lastUpdated: '2 hr ago',
+  },
+]
