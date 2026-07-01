@@ -3,6 +3,7 @@ import { useTurbineStatus } from './hooks/useTurbineStatus'
 import { useTheme } from './components/theme-provider'
 import TurbineCard from './components/TurbineCard'
 import TurbineDialog from './components/TurbineDialog'
+import ChartsTab from './components/ChartsTab'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
@@ -35,6 +36,7 @@ export default function App() {
   const { theme, toggleTheme } = useTheme()
   const [selectedTurbine, setSelectedTurbine] = useState<Turbine | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState<'overview' | 'charts'>('overview')
 
   const handleCardClick = (turbine: Turbine) => {
     setSelectedTurbine(turbine)
@@ -55,6 +57,22 @@ export default function App() {
             <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">
               {counts.online} / {counts.all} online
             </span>
+            <div className="flex gap-1 bg-muted rounded-lg p-1">
+              <Button
+                variant={activeTab === 'overview' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('overview')}
+              >
+                Overview
+              </Button>
+              <Button
+                variant={activeTab === 'charts' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setActiveTab('charts')}
+              >
+                Charts
+              </Button>
+            </div>
             <Button variant="outline" size="sm" onClick={toggleTheme}>
               {theme === 'light' ? 'Dark mode' : 'Light mode'}
             </Button>
@@ -64,92 +82,98 @@ export default function App() {
 
       <main className="max-w-6xl mx-auto px-6 py-8">
 
-        {/* Error State */}
-        {isError && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertTitle>Failed to load turbines</AlertTitle>
-            <AlertDescription className="flex items-center justify-between">
-              <span>{error instanceof Error ? error.message : 'Something went wrong'}</span>
-              <Button variant="outline" size="sm" onClick={() => refetch()}>
-                Retry
-              </Button>
-            </AlertDescription>
-          </Alert>
-        )}
+        {activeTab === 'overview' ? (
+          <>
+            {/* Error State */}
+            {isError && (
+              <Alert variant="destructive" className="mb-6">
+                <AlertTitle>Failed to load turbines</AlertTitle>
+                <AlertDescription className="flex items-center justify-between">
+                  <span>{error instanceof Error ? error.message : 'Something went wrong'}</span>
+                  <Button variant="outline" size="sm" onClick={() => refetch()}>
+                    Retry
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            )}
 
-        {/* Summary Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-card rounded-xl border p-4">
-            <p className="text-xs text-muted-foreground">Online</p>
-            <p className="text-2xl font-medium text-green-600 mt-1">{counts.online}</p>
-          </div>
-          <div className="bg-card rounded-xl border p-4">
-            <p className="text-xs text-muted-foreground">Warning</p>
-            <p className="text-2xl font-medium text-yellow-500 mt-1">{counts.warning}</p>
-          </div>
-          <div className="bg-card rounded-xl border p-4">
-            <p className="text-xs text-muted-foreground">Offline</p>
-            <p className="text-2xl font-medium text-red-500 mt-1">{counts.offline}</p>
-          </div>
-        </div>
-
-        {/* Filters Row */}
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-          <div className="flex gap-2">
-            {FILTERS.map(f => (
-              <Button
-                key={f.value}
-                variant={filter === f.value ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilter(f.value)}
-              >
-                {f.label}
-                <span className="ml-2 text-xs opacity-60">{counts[f.value]}</span>
-              </Button>
-            ))}
-          </div>
-
-          <Select value={farmFilter} onValueChange={setFarmFilter}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select farm" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Farms</SelectItem>
-              {farms.map(farm => (
-                <SelectItem key={farm} value={farm}>{farm}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Turbine Grid */}
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-card rounded-xl border p-5 h-44 space-y-4">
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-3 w-1/3" />
-                <div className="grid grid-cols-2 gap-3">
-                  <Skeleton className="h-16 rounded-lg" />
-                  <Skeleton className="h-16 rounded-lg" />
-                </div>
+            {/* Summary Stats */}
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              <div className="bg-card rounded-xl border p-4">
+                <p className="text-xs text-muted-foreground">Online</p>
+                <p className="text-2xl font-medium text-green-600 mt-1">{counts.online}</p>
               </div>
-            ))}
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="text-center py-20 text-muted-foreground text-sm">
-            No turbines match this filter.
-          </div>
+              <div className="bg-card rounded-xl border p-4">
+                <p className="text-xs text-muted-foreground">Warning</p>
+                <p className="text-2xl font-medium text-yellow-500 mt-1">{counts.warning}</p>
+              </div>
+              <div className="bg-card rounded-xl border p-4">
+                <p className="text-xs text-muted-foreground">Offline</p>
+                <p className="text-2xl font-medium text-red-500 mt-1">{counts.offline}</p>
+              </div>
+            </div>
+
+            {/* Filters Row */}
+            <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+              <div className="flex gap-2">
+                {FILTERS.map(f => (
+                  <Button
+                    key={f.value}
+                    variant={filter === f.value ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setFilter(f.value)}
+                  >
+                    {f.label}
+                    <span className="ml-2 text-xs opacity-60">{counts[f.value]}</span>
+                  </Button>
+                ))}
+              </div>
+
+              <Select value={farmFilter} onValueChange={setFarmFilter}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select farm" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Farms</SelectItem>
+                  {farms.map(farm => (
+                    <SelectItem key={farm} value={farm}>{farm}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Turbine Grid */}
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="bg-card rounded-xl border p-5 h-44 space-y-4">
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-3 w-1/3" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Skeleton className="h-16 rounded-lg" />
+                      <Skeleton className="h-16 rounded-lg" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : filtered.length === 0 ? (
+              <div className="text-center py-20 text-muted-foreground text-sm">
+                No turbines match this filter.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filtered.map(turbine => (
+                  <TurbineCard
+                    key={turbine.id}
+                    turbine={turbine}
+                    onClick={() => handleCardClick(turbine)}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map(turbine => (
-              <TurbineCard
-                key={turbine.id}
-                turbine={turbine}
-                onClick={() => handleCardClick(turbine)}
-              />
-            ))}
-          </div>
+          <ChartsTab />
         )}
 
       </main>
