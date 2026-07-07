@@ -4,6 +4,8 @@ import { useTheme } from './components/theme-provider'
 import TurbineCard from './components/TurbineCard'
 import TurbineDialog from './components/TurbineDialog'
 import ChartsTab from './components/ChartsTab'
+import MapsTab from './components/MapsTab'
+import ReportsTab from './components/ReportsTab'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
@@ -17,12 +19,20 @@ import {
 import type { Turbine } from './types/turbine'
 
 type FilterOption = { label: string; value: 'all' | 'online' | 'warning' | 'offline' }
+type TabKey = 'overview' | 'charts' | 'maps' | 'reports'
 
 const FILTERS: FilterOption[] = [
   { label: 'All', value: 'all' },
   { label: 'Online', value: 'online' },
   { label: 'Warning', value: 'warning' },
   { label: 'Offline', value: 'offline' },
+]
+
+const TABS: { label: string; value: TabKey }[] = [
+  { label: 'Overview', value: 'overview' },
+  { label: 'Charts', value: 'charts' },
+  { label: 'Maps', value: 'maps' },
+  { label: 'Reports', value: 'reports' },
 ]
 
 export default function App() {
@@ -45,24 +55,31 @@ export default function App() {
   const [selectedTurbine, setSelectedTurbine] = useState<Turbine | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'charts'>(() => {
+  const [activeTab, setActiveTab] = useState<TabKey>(() => {
     const savedTab = localStorage.getItem('windboard-active-tab')
-    return savedTab === 'charts' ? 'charts' : 'overview'
+    return (['overview', 'charts', 'maps', 'reports'] as TabKey[]).includes(savedTab as TabKey)
+      ? (savedTab as TabKey)
+      : 'overview'
   })
 
   const [selectedTurbineId, setSelectedTurbineId] = useState<string | null>(null)
 
-  const [chartsVisited, setChartsVisited] = useState(() => {
-    const savedTab = localStorage.getItem('windboard-active-tab')
-    return savedTab === 'charts'
+  // Each tab lazy-mounts on first visit and then stays mounted (hidden via
+  // CSS) so switching back doesn't remount heavy children like the map
+  // or re-run chart layout calculations.
+  const [visitedTabs, setVisitedTabs] = useState<Record<TabKey, boolean>>(() => {
+    const savedTab = localStorage.getItem('windboard-active-tab') as TabKey | null
+    return {
+      overview: true,
+      charts: savedTab === 'charts',
+      maps: savedTab === 'maps',
+      reports: savedTab === 'reports',
+    }
   })
 
   useEffect(() => {
     localStorage.setItem('windboard-active-tab', activeTab)
-
-    if (activeTab === 'charts') {
-      setChartsVisited(true)
-    }
+    setVisitedTabs(prev => (prev[activeTab] ? prev : { ...prev, [activeTab]: true }))
   }, [activeTab])
 
   useEffect(() => {
@@ -97,21 +114,16 @@ export default function App() {
             </span>
 
             <div className="flex gap-1 bg-muted rounded-lg p-1">
-              <Button
-                variant={activeTab === 'overview' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setActiveTab('overview')}
-              >
-                Overview
-              </Button>
-
-              <Button
-                variant={activeTab === 'charts' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setActiveTab('charts')}
-              >
-                Charts
-              </Button>
+              {TABS.map(tab => (
+                <Button
+                  key={tab.value}
+                  variant={activeTab === tab.value ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setActiveTab(tab.value)}
+                >
+                  {tab.label}
+                </Button>
+              ))}
             </div>
 
             <Button variant="outline" size="sm" onClick={toggleTheme}>
@@ -210,7 +222,7 @@ export default function App() {
           )}
         </div>
 
-        {chartsVisited && (
+        {visitedTabs.charts && (
           <div className={activeTab === 'charts' ? 'block' : 'hidden'}>
             <ChartsTab
               filtered={filtered}
@@ -219,6 +231,22 @@ export default function App() {
               activeTab={activeTab}
               theme={theme}
             />
+          </div>
+        )}
+
+        {visitedTabs.maps && (
+          <div className={activeTab === 'maps' ? 'block' : 'hidden'}>
+            <MapsTab
+              filtered={filtered}
+              farmFilter={farmFilter}
+              onMarkerClick={handleCardClick}
+            />
+          </div>
+        )}
+
+        {visitedTabs.reports && (
+          <div className={activeTab === 'reports' ? 'block' : 'hidden'}>
+            <ReportsTab filtered={filtered} farmFilter={farmFilter} />
           </div>
         )}
       </main>
