@@ -15,6 +15,9 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 2400,
     windSpeed: 12.3,
     lastUpdated: '2 min ago',
+    lat:45,
+    lng:55
+    
   },
   {
     id: 'T-002',
@@ -24,6 +27,8 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 1800,
     windSpeed: 9.1,
     lastUpdated: '5 min ago',
+    lat:50,
+    lng:55
   },
   {
     id: 'T-003',
@@ -33,6 +38,8 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 0,
     windSpeed: 3.2,
     lastUpdated: '1 hr ago',
+    lat:55,
+    lng:65
   },
   {
     id: 'T-004',
@@ -42,6 +49,8 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 3100,
     windSpeed: 14.7,
     lastUpdated: '1 min ago',
+    lat:40,
+    lng:35
   },
   {
     id: 'T-005',
@@ -51,6 +60,8 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 2900,
     windSpeed: 13.5,
     lastUpdated: '3 min ago',
+    lat:25,
+    lng:35
   },
   {
     id: 'T-006',
@@ -60,6 +71,10 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 0,
     windSpeed: 2.8,
     lastUpdated: '2 hr ago',
+    
+    lat:35,
+    lng:55
+
   },
 ]
 
