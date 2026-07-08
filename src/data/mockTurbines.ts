@@ -15,9 +15,8 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 2400,
     windSpeed: 12.3,
     lastUpdated: '2 min ago',
-    lat:45,
-    lng:55
-    
+    lat: 24.7452,
+    lng: 67.9124
   },
   {
     id: 'T-002',
@@ -27,8 +26,8 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 1800,
     windSpeed: 9.1,
     lastUpdated: '5 min ago',
-    lat:50,
-    lng:55
+    lat: 24.7486,
+    lng: 67.9181
   },
   {
     id: 'T-003',
@@ -38,8 +37,8 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 0,
     windSpeed: 3.2,
     lastUpdated: '1 hr ago',
-    lat:55,
-    lng:65
+    lat: 24.7529,
+    lng: 67.9247
   },
   {
     id: 'T-004',
@@ -49,8 +48,8 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 3100,
     windSpeed: 14.7,
     lastUpdated: '1 min ago',
-    lat:40,
-    lng:35
+    lat: 24.7608,
+    lng: 67.9365
   },
   {
     id: 'T-005',
@@ -60,8 +59,8 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 2900,
     windSpeed: 13.5,
     lastUpdated: '3 min ago',
-    lat:25,
-    lng:35
+    lat: 24.7661,
+    lng: 67.9422
   },
   {
     id: 'T-006',
@@ -71,12 +70,10 @@ export const mockTurbines: Turbine[] = [
     powerOutput: 0,
     windSpeed: 2.8,
     lastUpdated: '2 hr ago',
-    
-    lat:35,
-    lng:55
-
+    lat: 24.7714,
+    lng: 67.9489
   },
-]
+];
 
 // --- Chart mock data generators (Block 9: ECharts) ---
 

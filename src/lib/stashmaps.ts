@@ -1,38 +1,3 @@
-/**
- * stashmaps — internal tile pipeline
- * ------------------------------------------------------------------
- * WHAT IT DOES
- * `stashmaps` is our internal CLI that turns each wind farm's raw site
- * assets (aerial/satellite imagery, elevation rasters, turbine layout
- * GeoJSON) into a standard XYZ raster tile pyramid, the same format
- * consumed by Leaflet's <TileLayer>.
- *
- * TYPICAL CLI WORKFLOW (run by infra/CI, not by the frontend):
- *   stashmaps build \
- *     --farm north-ridge \
- *     --input ./sites/north-ridge/ortho.tif \
- *     --zoom 8-18 \
- *     --output ./dist/tiles/north-ridge
- *
- *   This produces a folder tree: {z}/{x}/{y}.png per farm, plus a
- *   tileset.json manifest (bounds, minzoom/maxzoom, center) that the
- *   frontend can use to auto-fit the map.
- *
- * HOW TILES ARE SERVED TO THE FRONTEND
- * The generated tile trees are uploaded to our CDN/object storage and
- * exposed behind the app's own API gateway at:
- *
- *   {STASHMAPS_BASE_URL}/{farmSlug}/{z}/{x}/{y}.png
- *
- * The gateway path exists so we can swap storage backends (S3, GCS,
- * local disk in dev) without touching frontend code. In local dev,
- * `stashmaps serve --port 8081` stands up the same route shape against
- * tiles on disk.
- *
- * NOTE: Adjust STASHMAPS_BASE_URL via env var for your environment —
- * this file only encodes the *shape* of the contract.
- */
-
 export const STASHMAPS_BASE_URL =
   import.meta.env.VITE_STASHMAPS_BASE_URL ?? 'https://tiles.internal.windboard.io'
 
