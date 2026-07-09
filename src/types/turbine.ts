@@ -1,5 +1,3 @@
-// --- Core turbine type ---
-
 export type TurbineStatus = 'online' | 'warning' | 'offline'
 
 export interface Turbine {
@@ -7,32 +5,31 @@ export interface Turbine {
   name: string
   farm: string
   status: TurbineStatus
-  windSpeed?: number   // m/s, current reading
-  powerOutput?: number       // kW, current output
+  windSpeed?: number   
+  powerOutput?: number      
   lastUpdated?: string
-  lat?: number         // latitude, for map placement
-  lng?: number         // longitude, for map placement
+  lat?: number        
+  lng?: number         
 }
 
-// --- Chart-related types (Block 9: ECharts) ---
 
 export interface TimeSeriesPoint {
-  timestamp: string   // ISO date string
-  powerOutput: number // kW
-  windSpeed: number   // m/s
+  timestamp: string   
+  powerOutput: number 
+  windSpeed: number   
 }
 
 export interface FleetPerformanceEntry {
   id: string
   name: string
   farm: string
-  avgPowerOutput: number // kW, avg over last 7 days
-  capacityFactor: number // %
+  avgPowerOutput: number 
+  capacityFactor: number 
 }
 
 export interface PowerCurvePoint {
-  windSpeed: number   // m/s
-  powerOutput: number // kW
+  windSpeed: number   
+  powerOutput: number 
 }
 
 export type LossCategory = 'electrical' | 'mechanical' | 'wake' | 'curtailment' | 'availability'
@@ -40,5 +37,5 @@ export type LossCategory = 'electrical' | 'mechanical' | 'wake' | 'curtailment' 
 export interface LossBreakdownEntry {
   category: LossCategory
   label: string
-  value: number // MWh lost
+  value: number 
 }
