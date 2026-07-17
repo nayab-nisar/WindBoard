@@ -19,7 +19,7 @@ import {
 import type { Turbine } from './types/turbine'
 
 type FilterOption = { label: string; value: 'all' | 'online' | 'warning' | 'offline' }
-type TabKey = 'overview' | 'charts' | 'maps' | 'reports'
+type TabKey = 'overview' | 'charts' | 'maps' //| 'reports'
 
 const FILTERS: FilterOption[] = [
   { label: 'All', value: 'all' },
@@ -32,7 +32,7 @@ const TABS: { label: string; value: TabKey }[] = [
   { label: 'Overview', value: 'overview' },
   { label: 'Charts', value: 'charts' },
   { label: 'Maps', value: 'maps' },
-  { label: 'Reports', value: 'reports' },
+  //{ label: 'Reports', value: 'reports' },
 ]
 
 export default function App() {
@@ -57,7 +57,7 @@ export default function App() {
 
   const [activeTab, setActiveTab] = useState<TabKey>(() => {
     const savedTab = localStorage.getItem('windboard-active-tab')
-    return (['overview', 'charts', 'maps', 'reports'] as TabKey[]).includes(savedTab as TabKey)
+    return (['overview', 'charts', 'maps'] as TabKey[]).includes(savedTab as TabKey)
       ? (savedTab as TabKey)
       : 'overview'
   })
@@ -73,7 +73,7 @@ export default function App() {
       overview: true,
       charts: savedTab === 'charts',
       maps: savedTab === 'maps',
-      reports: savedTab === 'reports',
+      //reports: savedTab === 'reports',
     }
   })
 
