@@ -244,11 +244,11 @@ export default function App() {
           </div>
         )}
 
-        {visitedTabs.reports && (
+        {/* {visitedTabs.reports && (
           <div className={activeTab === 'reports' ? 'block' : 'hidden'}>
             <ReportsTab filtered={filtered} farmFilter={farmFilter} />
           </div>
-        )}
+        )} */}
       </main>
 
       <TurbineDialog
