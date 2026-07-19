@@ -10,6 +10,8 @@ import {
 } from '../lib/stashmaps'
 import type { Turbine } from '../types/turbine'
 
+import '../index.css'
+
 // NOTE: this assumes `Turbine` carries (or can carry) coordinates.
 // If your real type doesn't have these yet, add:
 //   lat?: number
@@ -95,48 +97,49 @@ export default function MapsTab({ filtered, farmFilter, onMarkerClick }: MapsTab
                 click: () => onMarkerClick?.(turbine),
               }}
             >
-         <Tooltip
+        <Tooltip
   direction="top"
   offset={[0, -10]}
   opacity={1}
   permanent={false}
+    className="windboard-tooltip"
+
 >
   <div
-    className="min-w-[180px] rounded-lg border p-3 shadow-lg"
+    className="min-w-[200px] rounded-lg p-3 text-slate-800"
     style={{
-      backgroundColor:
+      background:
         turbine.status === 'online'
           ? '#dcfce7'
           : turbine.status === 'warning'
           ? '#fef9c3'
           : '#fee2e2',
-
-      borderColor:
-        turbine.status === 'online'
-          ? '#22c55e'
-          : turbine.status === 'warning'
-          ? '#eab308'
-          : '#ef4444',
     }}
   >
-    <h3 className="font-semibold text-sm mb-2">
+    <h3 className="font-bold text-sm mb-3">
       {turbine.name}
     </h3>
 
-    <div className="space-y-1 text-xs">
+    <div className="space-y-2 text-xs">
       <div className="flex justify-between">
-        <span> Power</span>
-        <span>{turbine.powerOutput} kW</span>
+        <span>Power</span>
+        <span className="font-bold">
+          {turbine.powerOutput} kW
+        </span>
       </div>
 
       <div className="flex justify-between">
         <span>Wind</span>
-        <span>{turbine.windSpeed} m/s</span>
+        <span className="font-bold">
+          {turbine.windSpeed} m/s
+        </span>
       </div>
 
       <div className="flex justify-between">
         <span>Farm</span>
-        <span>{turbine.farm}</span>
+        <span className="font-bold">
+          {turbine.farm}
+        </span>
       </div>
     </div>
   </div>

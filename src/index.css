@@ -128,3 +128,16 @@
     @apply font-sans;
     }
 }
+
+/* Remove Leaflet default tooltip container */
+.leaflet-tooltip.windboard-tooltip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Remove the white arrow */
+.leaflet-tooltip.windboard-tooltip::before {
+  display: none !important;
+}
