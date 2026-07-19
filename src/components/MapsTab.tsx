@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Tooltip, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import {
@@ -95,12 +95,52 @@ export default function MapsTab({ filtered, farmFilter, onMarkerClick }: MapsTab
                 click: () => onMarkerClick?.(turbine),
               }}
             >
-              <Popup>
-                <div className="text-sm">
-                  <p className="font-medium">{(turbine as any).name ?? turbine.id}</p>
-                  <p className="text-muted-foreground capitalize">{(turbine as any).status}</p>
-                </div>
-              </Popup>
+         <Tooltip
+  direction="top"
+  offset={[0, -10]}
+  opacity={1}
+  permanent={false}
+>
+  <div
+    className="min-w-[180px] rounded-lg border p-3 shadow-lg"
+    style={{
+      backgroundColor:
+        turbine.status === 'online'
+          ? '#dcfce7'
+          : turbine.status === 'warning'
+          ? '#fef9c3'
+          : '#fee2e2',
+
+      borderColor:
+        turbine.status === 'online'
+          ? '#22c55e'
+          : turbine.status === 'warning'
+          ? '#eab308'
+          : '#ef4444',
+    }}
+  >
+    <h3 className="font-semibold text-sm mb-2">
+      {turbine.name}
+    </h3>
+
+    <div className="space-y-1 text-xs">
+      <div className="flex justify-between">
+        <span> Power</span>
+        <span>{turbine.powerOutput} kW</span>
+      </div>
+
+      <div className="flex justify-between">
+        <span>Wind</span>
+        <span>{turbine.windSpeed} m/s</span>
+      </div>
+
+      <div className="flex justify-between">
+        <span>Farm</span>
+        <span>{turbine.farm}</span>
+      </div>
+    </div>
+  </div>
+</Tooltip>
             </Marker>
           ))}
         </MapContainer>
