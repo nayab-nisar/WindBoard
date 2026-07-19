@@ -7,7 +7,7 @@ import {
   STASHMAPS_DEFAULT_TILE_URL,
   STASHMAPS_ATTRIBUTION,
   toFarmSlug,
-} from '@/lib/stashmaps'
+} from '../lib/stashmaps'
 import type { Turbine } from '../types/turbine'
 
 // NOTE: this assumes `Turbine` carries (or can carry) coordinates.
@@ -80,7 +80,10 @@ export default function MapsTab({ filtered, farmFilter, onMarkerClick }: MapsTab
           scrollWheelZoom
           style={{ height: '100%', width: '100%' }}
         >
-          <TileLayer url={tileUrl} attribution={STASHMAPS_ATTRIBUTION} />
+         <TileLayer
+         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+           attribution="&copy; OpenStreetMap contributors"
+          />
           <RecenterOnFarm center={center} />
 
           {located.map(turbine => (
